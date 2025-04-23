@@ -1,0 +1,27 @@
+name: Deploy to Environments
+
+on:
+  push:
+    branches:
+      - mybranch
+
+jobs:
+  deploy-to-stg:
+    runs-on: ubuntu-latest
+    environment: stg
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+    - name: Deploy to stg
+      run: echo "Deploying to stg environment"
+
+  deploy-to-stg1:
+    runs-on: ubuntu-latest
+    environment: stg1
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+    - name: Deploy to stg1
+      run: echo "Deploying to stg1 environment"
