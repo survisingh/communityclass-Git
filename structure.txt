@@ -1,0 +1,12 @@
+central-deploy-tool/
+│
+├── env-configs/
+│   ├── dev.yaml
+│   ├── staging.yaml
+│   └── prod.yaml
+│
+├── repos/
+│   ├── repo1/
+│   └── repo2/
+│
+└── deploy.py  (or deploy.sh)
