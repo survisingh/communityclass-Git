@@ -4,7 +4,11 @@ import subprocess
 from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, messagebox
+import requests
 
+# Replace with your GitHub token
+GITHUB_TOKEN = "ghp_your_personal_access_token_here"
+# Insert your real GitHub token into the script.
 # --- Repo Configurations ---
 REPOS = {
     "repo1": "git@github.com:your-org/repo1.git",
@@ -30,14 +34,55 @@ def commit_and_push(repo_path, env_name):
     subprocess.run(["git", "commit", "-m", f"Update input.yaml for {env_name}"], cwd=repo_path)
     subprocess.run(["git", "push"], cwd=repo_path)
 
+#-- Make sure each repo has a workflow_dispatch-enabled workflow file (.github/workflows/deploy.yml)
+
+def trigger_workflow(repo_name, env_name):
+    owner = "your-org"  #--- replace with your organisation value
+    repo = repo_name   # -- replace with your repo name 
+    workflow_file = "deploy.yml"  # Change if your workflow file is named differently
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/actions/workflows/{workflow_file}/dispatches"
+
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "X-GitHub-Api-Version": "2022-11-28"
+    }
+
+    data = {
+        "ref": "main",  # Or 'master' or any branch name
+        "inputs": {
+            "environment": env_name
+        }
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+
+    if response.status_code == 204:
+        print("✅ Workflow triggered successfully.")
+    else:
+        raise Exception(f"❌ Failed to trigger workflow: {response.status_code} - {response.text}")
+
+
+# --def deploy(repo_name, env_name):
+    #try:
+     #   repo_path = clone_or_pull_repo(repo_name)
+      #  update_input_yaml(repo_path, env_name)
+       # commit_and_push(repo_path, env_name)
+        # messagebox.showinfo("Success", f"{repo_name} deployed for {env_name} environment!")
+    #except Exception as e:
+     #   messagebox.showerror("Error", str(e))
+
 def deploy(repo_name, env_name):
     try:
         repo_path = clone_or_pull_repo(repo_name)
         update_input_yaml(repo_path, env_name)
         commit_and_push(repo_path, env_name)
-        messagebox.showinfo("Success", f"{repo_name} deployed for {env_name} environment!")
+        trigger_workflow(repo_name, env_name)
+        messagebox.showinfo("Success", f"{repo_name} deployed for {env_name} and workflow triggered!")
     except Exception as e:
         messagebox.showerror("Error", str(e))
+
 
 # --- GUI ---
 def run_gui():
