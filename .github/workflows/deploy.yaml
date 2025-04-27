@@ -28,7 +28,7 @@ jobs:
           # e.g., npm install or pip install -r requirements.txt
 
       - name: Run deployment
-        run: |
+        run: ./scripts/deploy1.sh $ENVIRONMENT
           echo "Deploying to $ENVIRONMENT"
           # Replace this with your real deployment script or commands
           # For example:
