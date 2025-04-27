@@ -10,3 +10,12 @@ central-deploy-tool/
 │   └── repo2/
 │
 └── deploy.py  (or deploy.sh)
+
+deploy-tool/
+├── deploy_gui.py
+├── env-configs/
+│   ├── dev.yaml
+│   ├── staging.yaml
+│   └── prod.yaml
+└── repos/
+    └── (cloned repos go here)
