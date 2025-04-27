@@ -1,0 +1,35 @@
+name: Deploy App
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment (dev, staging, prod)'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ inputs.environment }} #pass environment variables
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Show environment
+        run: echo "Deploying to $ENVIRONMENT environment"
+
+      - name: Install dependencies
+        run: |
+          echo "Installing dependencies for $ENVIRONMENT"
+          # Add your real install commands here
+          # e.g., npm install or pip install -r requirements.txt
+
+      - name: Run deployment
+        run: |
+          echo "Deploying to $ENVIRONMENT"
+          # Replace this with your real deployment script or commands
+          # For example:
+          # ./scripts/deploy.sh $ENVIRONMENT
